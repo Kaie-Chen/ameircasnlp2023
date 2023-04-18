@@ -36,7 +36,7 @@ def main():
     #model 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Model Loading . . . . . . . . . . . . . . . .")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M).to(device)
+    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M").to(device)
     model.eval()
     torch.no_grad()
     print("Model Loaded")
