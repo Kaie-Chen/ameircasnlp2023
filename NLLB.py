@@ -35,16 +35,16 @@ def main():
     #model 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Model Loading . . . . . . . . . . . . . . . .")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-1.3B", device_map="auto").to(device)
+    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M", device_map="auto").to(device)
     model.eval()
     torch.no_grad()
     print("Model Loaded")
     #Spanish language tokenizers
-    es_tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="es_Latn")
+    es_tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="es_Latn")
 
     #ashaninka language, code cni_Latn
     print("Processing ashanika")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="cni_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="cni_Latn")
     ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.cni')), batch_size = 1)
     es_ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.es')), batch_size = 1)
     # I don't think NLLB supports translation from spanish to (insert language)
@@ -53,63 +53,63 @@ def main():
 
     #aymara language, code aym_Latn
     print("Processing aymara")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="aym_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="aym_Latn")
     aymara_dataloader = DataLoader(Languages(load_raw_data('./processed_data/aymara/dev.aym')), batch_size = 1)
     es_aymara_dataloader = DataLoader(Languages(load_raw_data('./processed_data/aymara/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromAymara.txt', aymara_dataloader)
 
     #bribri language, code bzd_Latn
     print("Processing bribri")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="bzd_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="bzd_Latn")
     bribri_dataloader = DataLoader(Languages(load_raw_data('./processed_data/bribri/dev.bzd')), batch_size = 1)
     es_bribri_dataloader = DataLoader(Languages(load_raw_data('./processed_data/bribri/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromBribri.txt', bribri_dataloader)
 
     #guarani language, code gn_Latn
     print("Processing guarani")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="gn_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="gn_Latn")
     guarani_dataloader = DataLoader(Languages(load_raw_data('./processed_data/guarani/dev.gn')), batch_size = 1)
     es_guarani_dataloader = DataLoader(Languages(load_raw_data('./processed_data/guarani/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromGuarani.txt', guarani_dataloader)
     
     #hñähñu language, code oto_Latn
     print("Processing hñähñu")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="oto_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="oto_Latn")
     hñähñu_dataloader = DataLoader(Languages(load_raw_data('./processed_data/hñähñu/dev.oto')), batch_size = 1)
     es_hñähñu_dataloader = DataLoader(Languages(load_raw_data('./processed_data/hñähñu/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromhNähñu.txt', hñähñu_dataloader)
 
     #nahuatl language, code nah_Latn
     print("Processing nahuatl")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="nah_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="nah_Latn")
     nahuatl_dataloader = DataLoader(Languages(load_raw_data('./processed_data/nahuatl/dev.nah')), batch_size = 1)
     es_nahuatl_dataloader = DataLoader(Languages(load_raw_data('./processed_data/nahuatl/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromNahuatl.txt', nahuatl_dataloader)
 
     #quechua language, code quy_Latn
     print("Processing quechua")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="quy_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="quy_Latn")
     quechua_dataloader = DataLoader(Languages(load_raw_data('./processed_data/quechua/dev.quy')), batch_size = 1)
     es_quechua_dataloader = DataLoader(Languages(load_raw_data('./processed_data/quechua/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromQuechua.txt', quechua_dataloader)
 
     #raramuri language, code tar_Latn
     print("Processing raramuri")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="tar_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="tar_Latn")
     raramuri_dataloader = DataLoader(Languages(load_raw_data('./processed_data/raramuri/dev.tar')), batch_size = 1)
     es_raramuri_dataloader = DataLoader(Languages(load_raw_data('./processed_data/raramuri/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromRaramuri.txt', raramuri_dataloader)
 
     #shipibo_konibo language, code shp_Latn
     print("Processing shipibo_konibo")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="shp_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="shp_Latn")
     shipibo_konibo_dataloader = DataLoader(Languages(load_raw_data('./processed_data/shipibo_konibo/dev.shp')), batch_size = 1)
     es_shipibo_konibo_dataloader = DataLoader(Languages(load_raw_data('./processed_data/shipibo_konibo/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromShipibo_konibo.txt', shipibo_konibo_dataloader)
 
     #wixarika language, code hch_Latn
     print("Processing wixarika")
-    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="hch_Latn")
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="hch_Latn")
     wixarika_dataloader = DataLoader(Languages(load_raw_data('./processed_data/wixarika/dev.hch')), batch_size = 1)
     es_wixarika_dataloader = DataLoader(Languages(load_raw_data('./processed_data/wixarika/dev.es')), batch_size = 1)
     predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromWixarika.txt', wixarika_dataloader)
