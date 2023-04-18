@@ -64,7 +64,7 @@ def main():
     print("Processing guarani")
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="gn_Latn")
     guarani_dataloader = DataLoader(Languages(load_raw_data('./processed_data/guarani/dev.gn')), batch_size = 1)
-    es_guarani_dataloader = DataLoader(Languages(load_raw_data('./processed_data/guarani/dev.es')), batch_size = 1
+    es_guarani_dataloader = DataLoader(Languages(load_raw_data('./processed_data/guarani/dev.es')), batch_size = 1)
     #hñähñu language, code oto_Latn
     print("Processing hñähñu")
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="oto_Latn")
