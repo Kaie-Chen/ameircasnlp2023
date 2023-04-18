@@ -46,7 +46,9 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="cni_Latn")
     ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.cni')), batch_size = 1)
     es_ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.es')), batch_size = 1)
-    predict(tokenizer, model, 'es_Latn', './processed_data/ashaninka/predictedAshaninka.txt', ashaninka_dataloader)
+    # I don't think NLLB supports translation from spanish to (insert language)
+    predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromAshaninka.txt', ashaninka_dataloader)
+    #predict()
 
     #aymara language, code aym_Latn
     print("Processing aymara")
