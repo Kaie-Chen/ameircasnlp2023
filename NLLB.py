@@ -44,6 +44,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200/distilled-1.3B", src_lang="cni_Latn")
     ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.cni')), batch = 32)
     es_ashaninka_dataloader = DataLoader(Languages(load_raw_data('./processed_data/ashaninka/dev.es')), batch = 32)
+    predict(tokenizer, model, 'es', './processed_data/ashaninka/predictedAshaninka.txt', ashaninka_dataloader)
 
     #aymara language, code aym_Latn
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200/distilled-1.3B", src_lang="aym_Latn")
