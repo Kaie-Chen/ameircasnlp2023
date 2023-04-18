@@ -36,7 +36,7 @@ class Languages:
 def main():
     #model 
     print("Model Loading . . . . . . . . . . . . . . . .")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-1.3B")
+    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-1.3B", device_map="auto")
     print("Model Loaded")
     #Spanish language tokenizers
     es_tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="es_Latn")
