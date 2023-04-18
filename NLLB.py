@@ -16,8 +16,7 @@ def load_raw_data(path: str):
 def predict (tokenizer: AutoTokenizer, model: AutoModelForSeq2SeqLM, outputLang : str, outputFileName : str, data: DataLoader):
     output = []
     for batch in tqdm(data):
-        print(batch)
-        inputs = tokenizer(batch, return_tensors="pt")
+        inputs = tokenizer(batch[0], return_tensors="pt")
         translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id[outputLang], max_length=1024)
         output.append(tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0])
 
