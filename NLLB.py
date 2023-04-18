@@ -14,14 +14,12 @@ def load_raw_data(path: str):
     return data
 
 def predict (tokenizer: AutoTokenizer, model: AutoModelForSeq2SeqLM, outputLang : str, outputFileName : str, data: DataLoader):
-    output = []
-    for batch in tqdm(data):
-        inputs = tokenizer(batch[0], return_tensors="pt")
-        translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id[outputLang], max_length=1024)
-        output.append(tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0])
-
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     f = open(outputFileName, 'w')
-    for e in output:
+    for batch in tqdm(data):
+        inputs = tokenizer(batch[0], return_tensors="pt").to(device)
+        translated_tokens = model.generate(**inputs, forced_bos_token_id=tokenizer.lang_code_to_id[outputLang], max_length=1024)
+        e = (tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)[0])
         f.write(e)
     f.close()
 
@@ -35,8 +33,11 @@ class Languages:
 
 def main():
     #model 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Model Loading . . . . . . . . . . . . . . . .")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-1.3B")
+    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-1.3B", device_map="auto").to(device)
+    model.eval()
+    torch.no_grad()
     print("Model Loaded")
     #Spanish language tokenizers
     es_tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-1.3B", src_lang="es_Latn")
