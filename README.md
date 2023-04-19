@@ -5,5 +5,5 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 ## Results:
 | **Baseline NLLB-600M**  | **chrF** | **BLEU** |
 | ------------------------| -------- | -------- |
-| ashaninka          | Content  | -------- |
+| `ashaninka`          | Content  | -------- |
 | Content Cell            | Content  | -------- |
