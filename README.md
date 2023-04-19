@@ -15,3 +15,17 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 | `8. raramuri -> es`      | 13.47    | 0.86     |
 | `9. shipibo_konibo -> es`| 19.11    | 2.62     |
 | `10. wixarika -> es`     | 13.92    | 1.19     |
+
+
+| **Baseline NLLB-1.3B**   | **chrF** | **BLEU** |
+| -------------------------| -------- | -------- |
+| `1. ashaninka -> es`     | 15.13    | 1.60     |
+| `2. aymara -> es`        | 21.64    | 4.78     |
+| `3. bribri -> es`        | 17.53    | 1.59     |
+| `4. guarani -> es`       | 21.43    | 5.54     |
+| `5. hñähñu -> es`        | 16.84    | 1.45     |
+| `6. nahuatl -> es`       | 14.57    | 1.08     |
+| `7. quechua -> es`       | 28.20    | 9.36     |
+| `8. raramuri -> es`      | 15.35    | 1.49     |
+| `9. shipibo_konibo -> es`| 20.52    | 2.88     |
+| `10. wixarika -> es`     | 14.62    | 1.02     |
