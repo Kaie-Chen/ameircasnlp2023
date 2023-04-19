@@ -57,7 +57,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M", src_lang="aym_Latn")
     aymara_dataloader = DataLoader(Languages(load_raw_data('./processed_data/aymara/dev.aym')), batch_size = 1)
     es_aymara_dataloader = DataLoader(Languages(load_raw_data('./processed_data/aymara/dev.es')), batch_size = 1)
-    predict(tokenizer, model, 'spa_Latn', './processed_data/ashaninka/SpanishFromAymara.txt', aymara_dataloader)
+    predict(tokenizer, model, 'spa_Latn', './processed_data/aymara/SpanishFromAymara.txt', aymara_dataloader)
 
     #bribri language, code bzd_Latn
     print("Processing bribri")
