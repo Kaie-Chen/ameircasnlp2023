@@ -1,0 +1,15 @@
+Job ID: 3647
+Job User: tianruigu
+Num Cores: 16
+Model Loading . . . . . . . . . . . . . . . .
+Model Loaded
+Processing ashanika
+Processing aymara
+Processing bribri
+Processing guarani
+Processing hñähñu
+Processing nahuatl
+Processing quechua
+Processing raramuri
+Processing shipibo_konibo
+Processing wixarika

@@ -34,7 +34,7 @@ def predict(model: nn.Module, dataloader: DataLoader, tokenizer: AutoTokenizer, 
             
             preds.append(tokenizer.batch_decode(logits, skip_special_tokens=True))
                     
-    with open(path+"pretrain_result.txt", "w") as f:
+    with open(path+"pretrain_result.txt", "w", encoding='utf8') as f:
         for text in preds:
             f.write(" ".join(text) + "\n")
 
