@@ -56,8 +56,8 @@ class Languages:
     
     def __getitem__(self, idx):
         if self.with_target:
-            # for training and validation
-            return self.src_text[idx], self.target_text[idx]
+            # for training and validationself.src_text[idx], self.target_text[idx]
+            return 
         else:
             # for testing
             return self.src_text[idx]

@@ -23,22 +23,22 @@ def load_raw_data(src_filepath: str, target_filepath: str = None):
     return data
 
 
-def predict(model: nn.Module, dataloader: DataLoader, tokenizer: AutoTokenizer, device: torch.device) -> List[List[str]]:
-    ### Temperaty 
-
+def predict(
+    model: nn.Module, 
+    dataloader: DataLoader, 
+    tokenizer: AutoTokenizer, 
+    device: torch.device
+) -> List[List[int]]:
     model.eval()
-    torch.no_grad()
     preds = []
     
     with torch.no_grad():
         for batch in tqdm(dataloader):
-            inputs = tokenizer(batch, return_tensors="pt").to(device)
-            logits = model.generate(**inputs, max_length=512,
+            inputs = tokenizer(batch, padding='max_length', truncation=True, 
+                               max_length=256, return_tensors="pt").to(device)            
+            logits = model.generate(**inputs, max_length=256,
                                     forced_bos_token_id=tokenizer.lang_code_to_id["spa_Latn"])
-
-            # only consider non-padded tokens
-            # impement later
             
-            preds.append(tokenizer.batch_decode(logits, skip_special_tokens=True))
+            preds.append(logits)
                     
     return preds
