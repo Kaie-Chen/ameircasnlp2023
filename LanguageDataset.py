@@ -26,10 +26,10 @@ class LanguageDataset:
 
     def __getitem__(self, idx):
         input_feature = self.tokenizer(self.src_text[idx], max_length=self.max_length, 
-                                           padding='max_length', truncation=True, return_tensors="pt")
+                                           padding='max_length', truncation=True)
         if self.with_target:
             label = self.tokenizer(self.src_text[idx], text_target=self.target_text[idx], max_length=self.max_length, 
-                                       padding='max_length', truncation=True, return_tensors="pt")
+                                       padding='max_length', truncation=True)
             # for training and validation
             return label
         else:
