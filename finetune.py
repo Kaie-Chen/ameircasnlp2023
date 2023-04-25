@@ -62,13 +62,8 @@ print("Data Loading . . . . . . . . . . . . . . . .")
 tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
 
 train_raw = load_raw_data(ashaninka_folder + 'dedup_filtered.cni', ashaninka_folder + 'dedup_filtered.es')
-train_raw['src_text'] = train_raw['src_text']
-train_raw['target_text'] = train_raw['target_text']
 
 eval_raw = load_raw_data(ashaninka_folder + 'dev.cni', ashaninka_folder + 'dev.es')
-eval_raw['src_text'] = eval_raw['src_text']
-eval_raw['target_text'] = eval_raw['target_text']
-
 
 train_data = LanguageDataset(train_raw, tokenizer, max_length=256)
 eval_data = LanguageDataset(eval_raw, tokenizer, max_length=256)
