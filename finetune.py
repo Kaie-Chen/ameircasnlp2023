@@ -1,3 +1,5 @@
+# finetune.py
+
 import os
 import numpy as np
 from os.path import exists
@@ -46,7 +48,6 @@ report_gpu()
 
 # Load Model
 main_folder =  './processed_data/'
-ashaninka_folder = main_folder + 'ashaninka/'
 
 torch.manual_seed(42)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -60,16 +61,25 @@ print("Model Loaded")
 # Load Data
 print("Data Loading . . . . . . . . . . . . . . . .")
 tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
+# Load data 
+train_src_filepath = ['ashaninka/dedup_filtered.cni']
+train_trg_filepath = ['ashaninka/dedup_filtered.es']
+eval_src_filepath = ['ashaninka/dev.cni']
+eval_trg_filepath = ['ashaninka/dev.es']
+lang_code = ['cni_Latn']
 
-train_raw = load_raw_data(ashaninka_folder + 'dedup_filtered.cni', ashaninka_folder + 'dedup_filtered.es')
+train_raw = load_raw_data(train_src_filepath, lang_code, train_trg_filepath)
+eval_raw = load_raw_data(eval_src_filepath, lang_code, eval_trg_filepath)
+print("Data Loaded")
 
-eval_raw = load_raw_data(ashaninka_folder + 'dev.cni', ashaninka_folder + 'dev.es')
 
-train_data = LanguageDataset(train_raw, tokenizer, max_length=256)
-eval_data = LanguageDataset(eval_raw, tokenizer, max_length=256)
+# Create dataset
+print("Dataset Creating . . . . . . . . . . . . . . . .")
+train_data = LanguageDataset(train_raw, model_name, max_length=256)
+eval_data = LanguageDataset(eval_raw, model_name, max_length=256)
 
 data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
-print("Data Loaded")
+print("Dataset Created")
 
 # Copy from huggingface
 # Evaluate 
@@ -80,7 +90,6 @@ def postprocess_text(preds, labels):
     labels = [[label.strip()] for label in labels]
 
     return preds, labels
-
 
 def compute_metrics(eval_preds):
     preds, labels = eval_preds
@@ -106,13 +115,13 @@ def compute_metrics(eval_preds):
 training_args = Seq2SeqTrainingArguments(
     output_dir="test_finetuned_model",
     evaluation_strategy="epoch",
-    learning_rate=1e-3,
-    warmup_steps=4000,
+    learning_rate=1e-5,
+    warmup_steps=6000,
     per_device_train_batch_size=16,
     per_device_eval_batch_size=16,
     weight_decay=0.01,
-    save_total_limit=3,
-    num_train_epochs=10,
+    save_total_limit=5,
+    num_train_epochs=20,
     predict_with_generate=True,
 )
 
