@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from os.path import exists
 from typing import Dict, List, Optional
 from collections import Counter
@@ -33,6 +34,14 @@ from transformers import AutoModelForSeq2SeqLM, Seq2SeqTrainingArguments, Seq2Se
 import evaluate
 from LanguageDataset import LanguageDataset
 from utils import load_raw_data, predict
+import gc
+
+
+def report_gpu():
+   print(torch.cuda.list_gpu_processes())
+   gc.collect()
+   torch.cuda.empty_cache()
+report_gpu()
 
 
 # Load Model
@@ -49,22 +58,23 @@ print("Model Loaded")
 
 
 # Load Data
+print("Data Loading . . . . . . . . . . . . . . . .")
 tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
 
 train_raw = load_raw_data(ashaninka_folder + 'dedup_filtered.cni', ashaninka_folder + 'dedup_filtered.es')
-train_raw['src_text'] = train_raw['src_text'][:10]
-train_raw['target_text'] = train_raw['target_text'][:10]
+train_raw['src_text'] = train_raw['src_text']
+train_raw['target_text'] = train_raw['target_text']
 
 eval_raw = load_raw_data(ashaninka_folder + 'dev.cni', ashaninka_folder + 'dev.es')
-eval_raw['src_text'] = eval_raw['src_text'][:2]
-eval_raw['target_text'] = eval_raw['target_text'][:2]
+eval_raw['src_text'] = eval_raw['src_text']
+eval_raw['target_text'] = eval_raw['target_text']
 
 
-train_data = LanguageDataset(train_raw, tokenizer, max_length=32)
-eval_data = LanguageDataset(eval_raw, tokenizer, max_length=32)
+train_data = LanguageDataset(train_raw, tokenizer, max_length=256)
+eval_data = LanguageDataset(eval_raw, tokenizer, max_length=256)
 
 data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
-
+print("Data Loaded")
 
 # Copy from huggingface
 # Evaluate 
@@ -99,12 +109,12 @@ def compute_metrics(eval_preds):
 
 # Trainer
 training_args = Seq2SeqTrainingArguments(
-    output_dir="test_trainer",
+    output_dir="test_finetuned_model",
     evaluation_strategy="epoch",
-    learning_rate=2e-5,
-    warmup_steps=6000,
-    per_device_train_batch_size=4,
-    per_device_eval_batch_size=4,
+    learning_rate=1e-3,
+    warmup_steps=4000,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=16,
     weight_decay=0.01,
     save_total_limit=3,
     num_train_epochs=10,
@@ -121,4 +131,6 @@ trainer = Seq2SeqTrainer(
     compute_metrics=compute_metrics,
 )
 
+print("Training . . . . . . . . . . . . . . . .")
 trainer.train()
+print("Trained")

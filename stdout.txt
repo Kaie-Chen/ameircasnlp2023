@@ -1,15 +1,15 @@
-Job ID: 3647
+Job ID: 3678
 Job User: tianruigu
 Num Cores: 16
+pynvml module not found, please install pynvml
 Model Loading . . . . . . . . . . . . . . . .
 Model Loaded
-Processing ashanika
-Processing aymara
-Processing bribri
-Processing guarani
-Processing hñähñu
-Processing nahuatl
-Processing quechua
-Processing raramuri
-Processing shipibo_konibo
-Processing wixarika
+Data Loading . . . . . . . . . . . . . . . .
+Data Loaded
+Training . . . . . . . . . . . . . . . .
+{'eval_loss': 13.12857437133789, 'eval_bleu': 1.5347, 'eval_gen_len': 29.32, 'eval_runtime': 7.4693, 'eval_samples_per_second': 13.388, 'eval_steps_per_second': 0.536, 'epoch': 1.0}
+{'eval_loss': 12.346013069152832, 'eval_bleu': 1.8087, 'eval_gen_len': 30.97, 'eval_runtime': 8.6557, 'eval_samples_per_second': 11.553, 'eval_steps_per_second': 0.462, 'epoch': 2.0}
+{'eval_loss': 11.486201286315918, 'eval_bleu': 2.0581, 'eval_gen_len': 30.61, 'eval_runtime': 9.5194, 'eval_samples_per_second': 10.505, 'eval_steps_per_second': 0.42, 'epoch': 3.0}
+{'eval_loss': 10.377287864685059, 'eval_bleu': 1.0731, 'eval_gen_len': 40.68, 'eval_runtime': 8.9121, 'eval_samples_per_second': 11.221, 'eval_steps_per_second': 0.449, 'epoch': 4.0}
+{'eval_loss': 9.057572364807129, 'eval_bleu': 0.8479, 'eval_gen_len': 45.6, 'eval_runtime': 8.7612, 'eval_samples_per_second': 11.414, 'eval_steps_per_second': 0.457, 'epoch': 5.0}
+{'eval_loss': 8.006709098815918, 'eval_bleu': 1.0422, 'eval_gen_len': 34.7, 'eval_runtime': 8.8272, 'eval_samples_per_second': 11.329, 'eval_steps_per_second': 0.453, 'epoch': 6.0}
