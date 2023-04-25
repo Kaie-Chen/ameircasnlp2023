@@ -1,6 +1,7 @@
 import os
 import csv
 import math
+import evaluate
 import torch
 from torch import nn, Tensor
 from torch.utils.data import DataLoader
@@ -34,8 +35,8 @@ def predict(
     
     with torch.no_grad():
         for batch in tqdm(dataloader):
-            inputs = tokenizer(batch, padding='max_length', truncation=True, 
-                               max_length=256, return_tensors="pt").to(device)            
+            inputs = batch.to(device)
+
             logits = model.generate(**inputs, max_length=256,
                                     forced_bos_token_id=tokenizer.lang_code_to_id["spa_Latn"])
             
