@@ -68,17 +68,19 @@ eval_src_filepath = ['ashaninka/dev.cni']
 eval_trg_filepath = ['ashaninka/dev.es']
 lang_code = ['cni_Latn']
 
-train_raw = load_raw_data(train_src_filepath, lang_code, train_trg_filepath)
-eval_raw = load_raw_data(eval_src_filepath, lang_code, eval_trg_filepath)
+train_raw = load_raw_data(train_src_filepath, lang_code, model_name, train_trg_filepath, max_length=256)
+eval_raw = load_raw_data(eval_src_filepath, lang_code, model_name, eval_trg_filepath, max_length=256)
 print("Data Loaded")
 
 
 # Create dataset
 print("Dataset Creating . . . . . . . . . . . . . . . .")
-train_data = LanguageDataset(train_raw, model_name, max_length=256)
-eval_data = LanguageDataset(eval_raw, model_name, max_length=256)
+train_data = LanguageDataset(train_raw)
+eval_data = LanguageDataset(eval_raw)
 
 data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
+del train_raw
+del eval_raw
 print("Dataset Created")
 
 # Copy from huggingface
@@ -116,9 +118,9 @@ training_args = Seq2SeqTrainingArguments(
     output_dir="test_finetuned_model",
     evaluation_strategy="epoch",
     learning_rate=1e-5,
-    warmup_steps=6000,
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=16,
+    warmup_steps=10000,
+    per_device_train_batch_size=32,
+    per_device_eval_batch_size=32,
     weight_decay=0.01,
     save_total_limit=5,
     num_train_epochs=20,

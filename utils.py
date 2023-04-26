@@ -11,34 +11,42 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from typing import Dict, List, Optional
 
 
-def load_raw_data(src_filepath: List[str], lang_code: List[str], trg_filepath: List[str] = None):
+def load_raw_data(src_filepath: List[str], lang_code: List[str], model_name: str, 
+                  trg_filepath: List[str]=None, max_length: int=256):
     len_src = len(src_filepath)
+    text_data = {'src_text': []}
+    token_data = []
     if len_src != len(lang_code):
         raise Exception("Lengths of src_filepath and lang_code don't match.")
     
-    data = {'src_text': []}
-    for i in range(len_src):
-        path = src_filepath[i]
-        code = lang_code[i]
-
-        with open(path) as f:
-            for line in f:
-                data['src_text'].append({'text': line.strip(), 'lang_code': code})
-
     if trg_filepath:
-        data['target_text'] = []
+        text_data['target_text'] = []
         if len_src != len(trg_filepath):
             raise Exception("Lengths of src_filepath and trg_filepath don't match.")
-        
-        for i in range(len_src):
-            path = trg_filepath[i] 
-            code = lang_code[i]
+        is_trg = True
 
-            with open(path) as f:
+    for i in range(len_src):
+        src_path = src_filepath[i]
+        code = lang_code[i]
+        tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang=code, tgt_lang="spa_Latn")
+        with open(src_path) as f:
+            for line in f:
+                text_data['src_text'].append(line.strip())
+
+        if is_trg:
+            trg_path = trg_filepath[i] 
+            with open(trg_path) as f:
                 for line in f:
-                    data['target_text'].append({'text': line.strip(), 'lang_code': lang_code})
+                    text_data['target_text'].append(line.strip())
 
-    return data
+            for src_text, trg_text in zip(text_data['src_text'], text_data['target_text']):
+                token_data.append(tokenizer(src_text, text_target=trg_text, 
+                                            max_length=max_length, padding='max_length', truncation=True))
+        else:
+            for src_text in text_data['src_text']:
+                token_data.append(tokenizer(src_text, max_length=max_length, padding='max_length', truncation=True))
+
+    return token_data
 
 
 def predict(
