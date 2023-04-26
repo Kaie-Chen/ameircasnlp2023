@@ -155,14 +155,17 @@ def compute_metrics(eval_preds):
 training_args = Seq2SeqTrainingArguments(
     output_dir="test_finetuned_model",
     evaluation_strategy="epoch",
-    learning_rate=3e-5,
-    warmup_steps=8000,
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=16,
+    learning_rate=1e-5,
+    warmup_steps=6000,
+    per_device_train_batch_size=32,
+    per_device_eval_batch_size=32,
     weight_decay=0.01,
-    save_total_limit=5,
+    save_total_limit=10,
     num_train_epochs=20,
     predict_with_generate=True,
+    fp16=True,
+    save_strategy="epoch", 
+    load_best_model_at_end=True,
 )
 
 trainer = Seq2SeqTrainer(
