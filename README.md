@@ -19,16 +19,16 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 
 | **Finetuned NLLB-600M**  | **chrF**.| **BLEU** |
 | -------------------------| -------- | -------- |
-| `1. ashaninka -> es`     | 16.45    | 1.72     |
-| `2. aymara -> es`        | 32.90    | 12.06    |
-| `3. bribri -> es`        |  23.96   | 4.71     |
-| `4. guarani -> es`       | 33.58    | 12.90    |
-| `5. hñähñu -> es`        | 17.22    | 1.74     |
-| `6. nahuatl -> es`       | 18.54    | 2.81     |
-| `7. quechua -> es`       | 36.39    | 13.46    |
-| `8. raramuri -> es`      | 19.04    | 1.81     |
-| `9. shipibo_konibo -> es`| 31.01    | 9.14     |
-| `10. wixarika -> es`     | 22.18    | 4.08     |
+| `1. ashaninka -> es`     | 17.11    | 1.87     |
+| `2. aymara -> es`        | 33.83    | 12.85    |
+| `3. bribri -> es`        | 27.05    | 5.90     |
+| `4. guarani -> es`       | 34.43    | 12.93    |
+| `5. hñähñu -> es`        | 17.09    | 1.27     |
+| `6. nahuatl -> es`       | 19.64    | 3.41     |
+| `7. quechua -> es`       | 38.12    | 14.33    |
+| `8. raramuri -> es`      | 20.58    | 2.27     |
+| `9. shipibo_konibo -> es`| 36.10    | 12.96    |
+| `10. wixarika -> es`     | 23.84    | 4.70     |
 
 
 | **Baseline NLLB-1.3B**   | **chrF**.| **BLEU** |
