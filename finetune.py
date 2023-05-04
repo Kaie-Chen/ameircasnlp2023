@@ -151,19 +151,18 @@ def main():
         result = {k: round(v, 4) for k, v in result.items()}
         return result
 
-    op
     # Trainer
     training_args = Seq2SeqTrainingArguments(
         output_dir="finetune_models",
         evaluation_strategy="epoch",
-        learning_rate=6e-5,
+        learning_rate=3e-4,
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
         warmup_steps=6000,
-        lr_scheduler_type=get_cosine_schedule_with_warmup(AdamW, 6000, 40000, num_cycles=0.9),
+        lr_scheduler_type='constant_with_warmup',
         weight_decay=0.01,
         save_total_limit=10,
-        num_train_epochs=15,
+        num_train_epochs=20,
         predict_with_generate=True,
         fp16=True,
         save_strategy="epoch", 
