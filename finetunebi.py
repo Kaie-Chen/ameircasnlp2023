@@ -57,16 +57,17 @@ def main():
 
     # Load Data
     print("Data Loading . . . . . . . . . . . . . . . .")
-    lang_code = ['cni_Latn', 
-#                 'aym_Latn', 
-#                  'bzd_Latn', 
-#                  'gn_Latn', 
-#                  'oto_Latn', 
-#                  'nah_Latn', 
-#                  'quy_Latn', 
-#                  'tar_Latn', 
-#                  'shp_Latn', 
-#                  'hch_Latn'
+    lang_code = [
+                #    'cni_Latn', 
+                 'aym_Latn', 
+                  'bzd_Latn', 
+                  'gn_Latn', 
+                  'oto_Latn', 
+                  'nah_Latn', 
+                  'quy_Latn', 
+                  'tar_Latn', 
+                  'shp_Latn', 
+                  'hch_Latn'
                 ]
     tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn", additional_special_tokens=lang_code)
     tokenizer.tgt_lang = 'cni_Latn'
@@ -75,8 +76,9 @@ def main():
 #     tokenizer.add_tokens(list(new_tokens))
     model.resize_token_embeddings(len(tokenizer))
     # Load data 
-    train_src_filepath = [main_folder+'ashaninka/dedup_filtered.cni',
-                       main_folder+'aymara/dedup_filtered.aym',
+    train_src_filepath = [
+                    #     main_folder+'ashaninka/dedup_filtered.cni',
+                        main_folder+'aymara/dedup_filtered.aym',
                         main_folder+'bribri/dedup_filtered.bzd',
                         main_folder+'guarani/dedup_filtered.gn',
                         main_folder+'hñähñu/dedup_filtered.oto',
@@ -87,8 +89,9 @@ def main():
                         main_folder+'wixarika/dedup_filtered.hch'
                          ]
 
-    train_trg_filepath = [main_folder+'ashaninka/dedup_filtered.es',
-                       main_folder+'aymara/dedup_filtered.es',
+    train_trg_filepath = [
+                    #     main_folder+'ashaninka/dedup_filtered.es',
+                        main_folder+'aymara/dedup_filtered.es',
                         main_folder+'bribri/dedup_filtered.es',
                         main_folder+'guarani/dedup_filtered.es',
                         main_folder+'hñähñu/dedup_filtered.es',
@@ -99,7 +102,8 @@ def main():
                         main_folder+'wixarika/dedup_filtered.es'
                          ]
 
-    eval_src_filepath = [main_folder+'ashaninka/dev.cni',
+    eval_src_filepath = [
+                    #    main_folder+'ashaninka/dev.cni',
                        main_folder+'aymara/dev.aym',
                         main_folder+'bribri/dev.bzd',
                         main_folder+'guarani/dev.gn',
@@ -111,7 +115,8 @@ def main():
                         main_folder+'wixarika/dev.hch'
                         ]
 
-    eval_trg_filepath = [main_folder+'ashaninka/dev.es',
+    eval_trg_filepath = [
+                    #    main_folder+'ashaninka/dev.es',
                        main_folder+'aymara/dev.es',
                         main_folder+'bribri/dev.es',
                         main_folder+'guarani/dev.es',
@@ -124,23 +129,6 @@ def main():
                         ]
 
    
-
-    train_raw = load_raw_data(train_trg_filepath, lang_code, model_name,train_src_filepath , max_length=256)
-    eval_raw = load_raw_data(eval_trg_filepath, lang_code, model_name, eval_src_filepath, max_length=256)
-    print("Data Loaded")
-
-
-    # Create dataset
-    print("Dataset Creating . . . . . . . . . . . . . . . .")
-    train_data = LanguageDataset(train_raw)
-    eval_data = LanguageDataset(eval_raw)
-
-    data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
-
-    del train_raw 
-    del eval_raw
-    print("Dataset Created")
-
     # Copy from huggingface
     # Evaluate 
     metric = evaluate.load("chrf")
@@ -170,10 +158,54 @@ def main():
         result = {k: round(v, 4) for k, v in result.items()}
         return result
 
+    train_data = []
+    eval_data = []
+
+#    # for index in range(len(train_src_filepath)):
+#     #for index in range(1):
+#     train_raw = load_raw_data(train_src_filepath, lang_code, model_name, train_trg_filepath, max_length=256)
+#     eval_raw = load_raw_data(eval_src_filepath, lang_code, model_name, eval_trg_filepath, max_length=256)
+#     print("Data Loaded")
+#     print("Dataset Creating . . . . . . . . . . . . . . . .")
+#     train_data = LanguageDataset(train_raw)
+#     eval_data = LanguageDataset(eval_raw)
+#     print("Dataset Created")
+    for i in range(len(train_src_filepath)):
+        train_raw = load_raw_data([train_src_filepath[i]],[lang_code[i]], model_name, [train_trg_filepath[i]], max_length=256)
+        eval_raw = load_raw_data([eval_src_filepath[i]], [lang_code[i]], model_name, [eval_trg_filepath[i]], max_length=256)
+        print("Data Loaded")
+        print("Dataset Creating . . . . . . . . . . . . . . . .")
+        train_data.append(LanguageDataset(train_raw))
+        eval_data.append(LanguageDataset(eval_raw))
+        print("Dataset Created")
+    
+
+    # Create dataset
+   
+
+    data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
+
+    del train_raw 
+    del eval_raw
+    
+    languages = [
+        #"ashaninka",
+        "aymara",
+        "bribri",
+        "guarani",
+        "hnahnu",
+        "nahuatl",
+        "quechua",
+        "raramuri",
+        "shipibo_konibo",
+        "wixarika"
+    ]
+
     # Trainer
     training_args = Seq2SeqTrainingArguments(
-        output_dir="finetune_models",
-        evaluation_strategy="epoch",
+        output_dir="finetune_models/ashaninka",
+        evaluation_strategy="steps",
+        report_to="wandb",
         learning_rate=6e-5,
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
@@ -181,32 +213,46 @@ def main():
         lr_scheduler_type='constant_with_warmup',
         weight_decay=0.01,
         save_total_limit=10,
-        num_train_epochs=3,
+        num_train_epochs=18,
         predict_with_generate=True,
         fp16=True,
-        save_strategy="epoch", 
+        eval_steps = 5000,
+        save_steps = 10000,
         gradient_accumulation_steps=8,
         load_best_model_at_end=True,
         group_by_length=True,
         logging_first_step=True,
-        auto_find_batch_size=True,
+        auto_find_batch_size=True,          
+        logging_steps=100,
+        run_name = 'ashaninka'
+
     )
 
     trainer = Seq2SeqTrainer(
         model=model,
         args=training_args,
-        train_dataset=train_data,
+        train_dataset=train_data[0],
         tokenizer=tokenizer,
-        eval_dataset=eval_data,
+        eval_dataset=eval_data[0],
         data_collator=data_collator,
         compute_metrics=compute_metrics,
     )
-
-    print("Training . . . . . . . . . . . . . . . .")
+    print("Training ashaninka . . . . . . . . . . . . . . . .")
     trainer.train()
     print("Trained")
 
-
+    index = 0
+    for lang in languages:
+        training_args.output_dir = "finetune_models/"+lang
+        training_args.run_name = lang
+        trainer.train_dataset = train_data[index]
+        trainer.eval_dataset = eval_data[index]
+        trainer.args = training_args
+        index = index + 1
+        print("Training " + lang + " . . . . . . . . . . . . . . . .")
+        trainer.train()
+        print("Trained")
+        
 
 if __name__ == '__main__':
     main()
