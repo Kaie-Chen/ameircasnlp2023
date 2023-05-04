@@ -49,9 +49,9 @@ def main():
 
     print("Model Loading . . . . . . . . . . . . . . . .")
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-    for name, param in model.named_parameters():
-        if param.requires_grad and ('decoder' in name or 'shared' in name):
-            param.requires_grad = False
+    # for name, param in model.named_parameters():
+    #     if param.requires_grad and ('decoder' in name or 'shared' in name):
+    #         param.requires_grad = False
     print("Model Loaded")
 
 
@@ -68,7 +68,7 @@ def main():
                   'shp_Latn', 
                   'hch_Latn'
                 ]
-    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
+    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="spa_Latn", tgt_lang="cni_Latn")
     new_tokens = lang_code
     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
     tokenizer.add_tokens(list(new_tokens))
