@@ -49,9 +49,9 @@ def main():
 
     print("Model Loading . . . . . . . . . . . . . . . .")
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-    # for name, param in model.named_parameters():
-    #     if param.requires_grad and ('decoder' in name or 'shared' in name):
-    #         param.requires_grad = False
+    for name, param in model.named_parameters():
+        if param.requires_grad and ('decoder' in name or 'shared' in name):
+            param.requires_grad = False
     print("Model Loaded")
 
 
@@ -59,16 +59,16 @@ def main():
     print("Data Loading . . . . . . . . . . . . . . . .")
     lang_code = ['cni_Latn', 
                  'aym_Latn', 
-                  'bzd_Latn', 
-                  'gn_Latn', 
-                  'oto_Latn', 
-                  'nah_Latn', 
-                  'quy_Latn', 
-                  'tar_Latn', 
-                  'shp_Latn', 
-                  'hch_Latn'
+#                  'bzd_Latn', 
+#                  'gn_Latn', 
+#                  'oto_Latn', 
+#                  'nah_Latn', 
+#                  'quy_Latn', 
+#                  'tar_Latn', 
+#                  'shp_Latn', 
+#                  'hch_Latn'
                 ]
-    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="spa_Latn", tgt_lang="cni_Latn")
+    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
     new_tokens = lang_code
     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
     tokenizer.add_tokens(list(new_tokens))
@@ -76,50 +76,50 @@ def main():
     # Load data 
     train_src_filepath = [main_folder+'ashaninka/dedup_filtered.cni',
                         main_folder+'aymara/dedup_filtered.aym',
-                         main_folder+'bribri/dedup_filtered.bzd',
-                         main_folder+'guarani/dedup_filtered.gn',
-                         main_folder+'hñähñu/dedup_filtered.oto',
-                         main_folder+'nahuatl/dedup_filtered.nah',
-                         main_folder+'quechua/dedup_filtered.quy',
-                         main_folder+'raramuri/dedup_filtered.tar',
-                         main_folder+'shipibo_konibo/dedup_filtered.shp',
-                         main_folder+'wixarika/dedup_filtered.hch'
+#                         main_folder+'bribri/dedup_filtered.bzd',
+#                         main_folder+'guarani/dedup_filtered.gn',
+#                         main_folder+'hñähñu/dedup_filtered.oto',
+#                         main_folder+'nahuatl/dedup_filtered.nah',
+#                         main_folder+'quechua/dedup_filtered.quy',
+#                         main_folder+'raramuri/dedup_filtered.tar',
+#                         main_folder+'shipibo_konibo/dedup_filtered.shp',
+#                         main_folder+'wixarika/dedup_filtered.hch'
                          ]
 
     train_trg_filepath = [main_folder+'ashaninka/dedup_filtered.es',
                         main_folder+'aymara/dedup_filtered.es',
-                         main_folder+'bribri/dedup_filtered.es',
-                         main_folder+'guarani/dedup_filtered.es',
-                         main_folder+'hñähñu/dedup_filtered.es',
-                         main_folder+'nahuatl/dedup_filtered.es',
-                         main_folder+'quechua/dedup_filtered.es',
-                         main_folder+'raramuri/dedup_filtered.es',
-                         main_folder+'shipibo_konibo/dedup_filtered.es',
-                         main_folder+'wixarika/dedup_filtered.es'
+#                         main_folder+'bribri/dedup_filtered.es',
+#                         main_folder+'guarani/dedup_filtered.es',
+#                         main_folder+'hñähñu/dedup_filtered.es',
+#                         main_folder+'nahuatl/dedup_filtered.es',
+#                         main_folder+'quechua/dedup_filtered.es',
+#                         main_folder+'raramuri/dedup_filtered.es',
+#                         main_folder+'shipibo_konibo/dedup_filtered.es',
+#                         main_folder+'wixarika/dedup_filtered.es'
                          ]
 
     eval_src_filepath = [main_folder+'ashaninka/dev.cni',
                         main_folder+'aymara/dev.aym',
-                         main_folder+'bribri/dev.bzd',
-                         main_folder+'guarani/dev.gn',
-                         main_folder+'hñähñu/dev.oto',
-                         main_folder+'nahuatl/dev.nah',
-                         main_folder+'quechua/dev.quy',
-                         main_folder+'raramuri/dev.tar',
-                         main_folder+'shipibo_konibo/dev.shp',
-                         main_folder+'wixarika/dev.hch'
+#                         main_folder+'bribri/dev.bzd',
+#                         main_folder+'guarani/dev.gn',
+#                         main_folder+'hñähñu/dev.oto',
+#                         main_folder+'nahuatl/dev.nah',
+#                         main_folder+'quechua/dev.quy',
+#                         main_folder+'raramuri/dev.tar',
+#                         main_folder+'shipibo_konibo/dev.shp',
+#                         main_folder+'wixarika/dev.hch'
                         ]
 
     eval_trg_filepath = [main_folder+'ashaninka/dev.es',
                         main_folder+'aymara/dev.es',
-                         main_folder+'bribri/dev.es',
-                         main_folder+'guarani/dev.es',
-                         main_folder+'hñähñu/dev.es',
-                         main_folder+'nahuatl/dev.es',
-                         main_folder+'quechua/dev.es',
-                         main_folder+'raramuri/dev.es',
-                         main_folder+'shipibo_konibo/dev.es',
-                         main_folder+'wixarika/dev.es'
+#                         main_folder+'bribri/dev.es',
+#                         main_folder+'guarani/dev.es',
+#                         main_folder+'hñähñu/dev.es',
+#                         main_folder+'nahuatl/dev.es',
+#                         main_folder+'quechua/dev.es',
+#                         main_folder+'raramuri/dev.es',
+#                         main_folder+'shipibo_konibo/dev.es',
+#                         main_folder+'wixarika/dev.es'
                         ]
 
    
