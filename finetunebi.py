@@ -33,7 +33,7 @@ import torch.nn.functional as F
 from transformers import DataCollatorForSeq2Seq
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers import AutoModelForSeq2SeqLM, Seq2SeqTrainingArguments, Seq2SeqTrainer
-from transformers import AdamW, get_cosine_schedule_with_warmup
+from transformers import AdamW, get_cosine_schedule_with_warmup, get_scheduler
 import evaluate
 from LanguageDataset import LanguageDataset
 from utils import load_raw_data, predict
@@ -58,24 +58,25 @@ def main():
     # Load Data
     print("Data Loading . . . . . . . . . . . . . . . .")
     lang_code = ['cni_Latn', 
-                 'aym_Latn', 
-                 'bzd_Latn', 
-                 'gn_Latn', 
-                 'oto_Latn', 
-                 'nah_Latn', 
-                 'quy_Latn', 
-                 'tar_Latn', 
-                 'shp_Latn', 
-                 'hch_Latn'
+#                 'aym_Latn', 
+#                  'bzd_Latn', 
+#                  'gn_Latn', 
+#                  'oto_Latn', 
+#                  'nah_Latn', 
+#                  'quy_Latn', 
+#                  'tar_Latn', 
+#                  'shp_Latn', 
+#                  'hch_Latn'
                 ]
-    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
-    new_tokens = lang_code
-    new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
-    tokenizer.add_tokens(list(new_tokens))
+    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn", additional_special_tokens=lang_code)
+    tokenizer.tgt_lang = 'cni_Latn'
+    #     new_tokens = lang_code
+#     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
+#     tokenizer.add_tokens(list(new_tokens))
     model.resize_token_embeddings(len(tokenizer))
     # Load data 
     train_src_filepath = [main_folder+'ashaninka/dedup_filtered.cni',
-                        main_folder+'aymara/dedup_filtered.aym',
+                       main_folder+'aymara/dedup_filtered.aym',
                         main_folder+'bribri/dedup_filtered.bzd',
                         main_folder+'guarani/dedup_filtered.gn',
                         main_folder+'hñähñu/dedup_filtered.oto',
@@ -87,7 +88,7 @@ def main():
                          ]
 
     train_trg_filepath = [main_folder+'ashaninka/dedup_filtered.es',
-                        main_folder+'aymara/dedup_filtered.es',
+                       main_folder+'aymara/dedup_filtered.es',
                         main_folder+'bribri/dedup_filtered.es',
                         main_folder+'guarani/dedup_filtered.es',
                         main_folder+'hñähñu/dedup_filtered.es',
@@ -99,7 +100,7 @@ def main():
                          ]
 
     eval_src_filepath = [main_folder+'ashaninka/dev.cni',
-                        main_folder+'aymara/dev.aym',
+                       main_folder+'aymara/dev.aym',
                         main_folder+'bribri/dev.bzd',
                         main_folder+'guarani/dev.gn',
                         main_folder+'hñähñu/dev.oto',
@@ -111,7 +112,7 @@ def main():
                         ]
 
     eval_trg_filepath = [main_folder+'ashaninka/dev.es',
-                        main_folder+'aymara/dev.es',
+                       main_folder+'aymara/dev.es',
                         main_folder+'bribri/dev.es',
                         main_folder+'guarani/dev.es',
                         main_folder+'hñähñu/dev.es',
@@ -177,10 +178,10 @@ def main():
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
         warmup_steps=6000,
-        lr_scheduler_type=get_cosine_schedule_with_warmup(AdamW(model.parameters()), 6000, 40000, num_cycles=0.9),
+        lr_scheduler_type='constant_with_warmup',
         weight_decay=0.01,
         save_total_limit=10,
-        num_train_epochs=15,
+        num_train_epochs=3,
         predict_with_generate=True,
         fp16=True,
         save_strategy="epoch", 

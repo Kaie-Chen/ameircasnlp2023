@@ -62,13 +62,13 @@ def load_raw_data_bilingual(src_filepath: List[str], lang_code: List[str], model
             raise Exception("Lengths of src_filepath and trg_filepath don't match.")
         is_trg = True
 
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="spa_Latn", additional_special_tokens=lang_code)
+        
     for i in range(len_src):
         src_path = src_filepath[i]
         code = lang_code[i]
-        new_tokens = [code]
-        new_tokens = set(new_tokens) - set(tokenizer.vocab,keys())
-        tokenizer.add_tokens(list(new_tokens))
-        tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="spa_Latn", tgt_lang=code)
+        tokenizer.tgt_lang = code
         with open(src_path, encoding="utf-8") as f:
             for line in f:
                 text_data['src_text'].append(line.strip())
