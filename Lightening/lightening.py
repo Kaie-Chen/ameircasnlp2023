@@ -1,4 +1,5 @@
 import pytorch_lightning as pl
+from utils import load_raw_data
 from transformers import AutoTokenizer
 from LanguageModelingData import LanugageDataModule
 from lightning_transformers.task.nlp.translation import (
@@ -56,15 +57,13 @@ lang_code = ['cni_Latn', 'aym_Latn', 'bzd_Latn', 'gn_Latn', 'oto_Latn',
 data = load_raw_data(train_src_filepath, lang_code, model_name, train_trg_filepath, max_length=128)
 eval = load_raw_data(eval_src_filepath, lang_code, model_name, eval_trg_filepath, max_length=128)
 
-
+pl.seed_everything(42, workers=True)
 model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
 dm = LanugageDataModule(
-    # WMT translation datasets: ['cs-en', 'de-en', 'fi-en', 'ro-en', 'ru-en', 'tr-en']
     data = data,
     eval = eval,
     batch_size = 32,
-
 )
-trainer = pl.Trainer(accelerator="gpu", devices="auto", max_epochs=1)
+trainer = pl.Trainer(accelerator="auto", devices="auto", max_epochs=1, default_root_dir="/mnt/data2/resource/NLLB")
 
 trainer.fit(model, dm)
