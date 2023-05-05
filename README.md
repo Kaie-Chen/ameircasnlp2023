@@ -3,19 +3,19 @@
 We will be using Meta's No Language Left Behind Model (NLLB) for the machine translation tasks
 
 ## Results:
-||**Baseline NLLB-600M**||
-| -------------------------| -------- | -------- |
-|| **chrF** | **BLEU** |
-| `1. ashaninka -> es`     | 16.56    | 2.36     |
-| `2. aymara -> es`        | 30.32    | 9.82     |
-| `3. bribri -> es`        | 21.37    | 2.45     |
-| `4. guarani -> es`       | 35.58    | 14.35    |
-| `5. hñähñu -> es`        | 17.53    | 1.30     |
-| `6. nahuatl -> es`       | 12.98    | 0.92     |
-| `7. quechua -> es`       | 32.56    | 10.35    |
-| `8. raramuri -> es`      | 17.07    | 1.19     |
-| `9. shipibo_konibo -> es`| 22.57    | 3.24     |
-| `10. wixarika -> es`     | 16.61    | 1.61     |
+||**Baseline NLLB-600M**||**Finetuned NLLB-600M**||
+| -------------------------| -------- | -------- | -------- | -------- |
+|| **chrF** | **BLEU** | **chrF** | **BLEU** |
+| `1. ashaninka -> es`     | 16.56    | 2.36     | 20.47    | 3.35     |
+| `2. aymara -> es`        | 30.32    | 9.82     | 32.03    | 11.03    |
+| `3. bribri -> es`        | 21.37    | 2.45     | 31.41    | 8.60     |
+| `4. guarani -> es`       | 35.58    | 14.35    | 30.98    | 9.79     |
+| `5. hñähñu -> es`        | 17.53    | 1.30     | 16.33    | 1.13     |
+| `6. nahuatl -> es`       | 12.98    | 0.92     | 27.21    | 8.60     |
+| `7. quechua -> es`       | 32.56    | 10.35    | 34.64    | 10.83    |
+| `8. raramuri -> es`      | 17.07    | 1.19     | 23.51    | 3.68     |
+| `9. shipibo_konibo -> es`| 22.57    | 3.24     | 37.01    | 13.46    |
+| `10. wixarika -> es`     | 16.61    | 1.61     | 27.68    | 6.36     |
 
 
 | **Finetuned NLLB-600M**  | **chrF** | **BLEU** |
