@@ -17,31 +17,19 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 | `10. wixarika -> es`     | 16.61    | 1.61     |
 
 
-| **Finetuned NLLB-600M**  | **chrF**.| **BLEU** |
+| **Finetuned Averaged NLLB-600M**  | **chrF**.| **BLEU** |
 | -------------------------| -------- | -------- |
-| `1. ashaninka -> es`     | 17.11    | 1.87     |
-| `2. aymara -> es`        | 33.83    | 12.85    |
-| `3. bribri -> es`        | 27.05    | 5.90     |
-| `4. guarani -> es`       | 34.43    | 12.93    |
-| `5. hñähñu -> es`        | 17.09    | 1.27     |
-| `6. nahuatl -> es`       | 19.64    | 3.41     |
-| `7. quechua -> es`       | 38.12    | 14.33    |
-| `8. raramuri -> es`      | 20.58    | 2.27     |
-| `9. shipibo_konibo -> es`| 36.10    | 12.96    |
-| `10. wixarika -> es`     | 23.84    | 4.70     |
+| `1. ashaninka -> es`     | 21.26    | 3.80     |
+| `2. aymara -> es`        | 34.48    | 13.23    |
+| `3. bribri -> es`        | 32.79    | 10.03    |
+| `4. guarani -> es`       | 34.15    | 13.01    |
+| `5. hñähñu -> es`        | 17.54    | 1.45     |
+| `6. nahuatl -> es`       | 27.78    | 9.01     |
+| `7. quechua -> es`       | 37.61    | 14.23    |
+| `8. raramuri -> es`      | 24.43    | 4.33     |
+| `9. shipibo_konibo -> es`| 39.60    | 16.03    |
+| `10. wixarika -> es`     | 28.30    | 6.91     |
 
 
-| **Baseline NLLB-1.3B**   | **chrF**.| **BLEU** |
-| -------------------------| -------- | -------- |
-| `1. ashaninka -> es`     | `15.13`  | 1.60     |
-| `2. aymara -> es`        | `21.64`  | `4.78`   |
-| `3. bribri -> es`        |  17.53   | 1.59     |
-| `4. guarani -> es`       | `21.43`  | `5.54`   |
-| `5. hñähñu -> es`        | `16.84`  | `1.45`   |
-| `6. nahuatl -> es`       | `14.57`  | `1.08`   |
-| `7. quechua -> es`       | `28.20`  | `9.36`   |
-| `8. raramuri -> es`      | `15.35`  | `1.49`   |
-| `9. shipibo_konibo -> es`| `20.52`  | `2.88`   |
-| `10. wixarika -> es`     | `14.62`  | 1.02     | 
-
+Multi-lingual model log
 ![alt text](https://github.com/KaieChen/ameircasnlp2023/blob/main/output.png)
