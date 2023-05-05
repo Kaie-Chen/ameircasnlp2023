@@ -17,7 +17,20 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 | `10. wixarika -> es`     | 16.61    | 1.61     |
 
 
-| **Finetuned Averaged NLLB-600M**  | **chrF**.| **BLEU** |
+| **Finetuned NLLB-600M**  | **chrF** | **BLEU** |
+| -------------------------| -------- | -------- |
+| `1. ashaninka -> es`     | 20.47    | 3.35     |
+| `2. aymara -> es`        | 32.03    | 11.03    |
+| `3. bribri -> es`        | 31.41    | 8.60     |
+| `4. guarani -> es`       | 30.98    | 9.79     |
+| `5. hñähñu -> es`        | 16.33    | 1.13     |
+| `6. nahuatl -> es`       | 27.21    | 8.60     |
+| `7. quechua -> es`       | 34.64    | 10.83    |
+| `8. raramuri -> es`      | 23.51    | 3.68     |
+| `9. shipibo_konibo -> es`| 37.01    | 13.46    |
+| `10. wixarika -> es`     | 27.68    | 6.36     |
+
+| **Averaged NLLB-600M**   | **chrF** | **BLEU** |
 | -------------------------| -------- | -------- |
 | `1. ashaninka -> es`     | 21.26    | 3.80     |
 | `2. aymara -> es`        | 34.48    | 13.23    |
