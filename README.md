@@ -4,8 +4,8 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 
 ## Results:
 ||**Baseline NLLB-600M**||
-|| **chrF** | **BLEU** |
 | -------------------------| -------- | -------- |
+|| **chrF** | **BLEU** |
 | `1. ashaninka -> es`     | 16.56    | 2.36     |
 | `2. aymara -> es`        | 30.32    | 9.82     |
 | `3. bribri -> es`        | 21.37    | 2.45     |
