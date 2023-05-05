@@ -43,3 +43,5 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 | `8. raramuri -> es`      | `15.35`  | `1.49`   |
 | `9. shipibo_konibo -> es`| `20.52`  | `2.88`   |
 | `10. wixarika -> es`     | `14.62`  | 1.02     | 
+
+![alt text](https://github.com/KaieChen/ameircasnlp2023/blob/main/output.png)
