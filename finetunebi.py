@@ -58,16 +58,16 @@ def main():
     # Load Data
     print("Data Loading . . . . . . . . . . . . . . . .")
     lang_code = [
-                #    'cni_Latn', 
-                 'aym_Latn', 
-                  'bzd_Latn', 
-                  'gn_Latn', 
-                  'oto_Latn', 
-                  'nah_Latn', 
-                  'quy_Latn', 
-                  'tar_Latn', 
-                  'shp_Latn', 
-                  'hch_Latn'
+               'cni_Latn', 
+                'aym_Latn', 
+                'bzd_Latn', 
+                'gn_Latn', 
+                'oto_Latn', 
+                'nah_Latn', 
+                'quy_Latn', 
+                'tar_Latn', 
+                'shp_Latn', 
+                'hch_Latn'
                 ]
     tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn", additional_special_tokens=lang_code)
     tokenizer.tgt_lang = 'cni_Latn'
@@ -77,7 +77,7 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
     # Load data 
     train_src_filepath = [
-                    #     main_folder+'ashaninka/dedup_filtered.cni',
+                        main_folder+'ashaninka/dedup_filtered.cni',
                         main_folder+'aymara/dedup_filtered.aym',
                         main_folder+'bribri/dedup_filtered.bzd',
                         main_folder+'guarani/dedup_filtered.gn',
@@ -90,7 +90,7 @@ def main():
                          ]
 
     train_trg_filepath = [
-                    #     main_folder+'ashaninka/dedup_filtered.es',
+                        main_folder+'ashaninka/dedup_filtered.es',
                         main_folder+'aymara/dedup_filtered.es',
                         main_folder+'bribri/dedup_filtered.es',
                         main_folder+'guarani/dedup_filtered.es',
@@ -103,8 +103,8 @@ def main():
                          ]
 
     eval_src_filepath = [
-                    #    main_folder+'ashaninka/dev.cni',
-                       main_folder+'aymara/dev.aym',
+                        main_folder+'ashaninka/dev.cni',
+                        main_folder+'aymara/dev.aym',
                         main_folder+'bribri/dev.bzd',
                         main_folder+'guarani/dev.gn',
                         main_folder+'hñähñu/dev.oto',
@@ -116,8 +116,8 @@ def main():
                         ]
 
     eval_trg_filepath = [
-                    #    main_folder+'ashaninka/dev.es',
-                       main_folder+'aymara/dev.es',
+                        main_folder+'ashaninka/dev.es',
+                        main_folder+'aymara/dev.es',
                         main_folder+'bribri/dev.es',
                         main_folder+'guarani/dev.es',
                         main_folder+'hñähñu/dev.es',
@@ -189,7 +189,7 @@ def main():
     del eval_raw
     
     languages = [
-        #"ashaninka",
+        "ashaninka",
         "aymara",
         "bribri",
         "guarani",
@@ -215,15 +215,16 @@ def main():
         save_total_limit=10,
         num_train_epochs=18,
         predict_with_generate=True,
+        do_eval = True,
         fp16=True,
-        eval_steps = 5000,
-        save_steps = 10000,
+        eval_steps = 100,
+        save_steps = 5000,
         gradient_accumulation_steps=8,
         load_best_model_at_end=True,
         group_by_length=True,
         logging_first_step=True,
         auto_find_batch_size=True,          
-        logging_steps=100,
+        logging_steps=50,
         run_name = 'ashaninka'
 
     )
@@ -237,9 +238,9 @@ def main():
         data_collator=data_collator,
         compute_metrics=compute_metrics,
     )
-    print("Training ashaninka . . . . . . . . . . . . . . . .")
-    trainer.train()
-    print("Trained")
+    # print("Training ashaninka . . . . . . . . . . . . . . . .")
+    # trainer.train()
+    # print("Trained")
 
     index = 0
     for lang in languages:
