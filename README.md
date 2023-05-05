@@ -3,7 +3,8 @@
 We will be using Meta's No Language Left Behind Model (NLLB) for the machine translation tasks
 
 ## Results:
-| **Baseline NLLB-600M**   | **chrF** | **BLEU** |
+|                          |**Baseline NLLB-600M**|
+|                          | **chrF** | **BLEU** |
 | -------------------------| -------- | -------- |
 | `1. ashaninka -> es`     | 16.56    | 2.36     |
 | `2. aymara -> es`        | 30.32    | 9.82     |
