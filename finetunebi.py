@@ -50,12 +50,7 @@ def main():
     #model_name = "finetune_models/checkpoint-16"
     model_name = "facebook/nllb-200-distilled-600M"
 
-    print("Model Loading . . . . . . . . . . . . . . . .")
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-    for name, param in model.named_parameters():
-        if param.requires_grad and ('decoder' in name or 'shared' in name):
-            param.requires_grad = False
-    print("Model Loaded")
+
 
 
     # Load Data
@@ -212,6 +207,13 @@ def main():
     index2 = 0
     for lang in languages:
         # Trainer
+        print("Model Loading . . . . . . . . . . . . . . . .")
+        model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+        for name, param in model.named_parameters():
+            if param.requires_grad and ('decoder' in name or 'shared' in name):
+                param.requires_grad = False
+        print("Model Loaded")
+        x
         training_args = Seq2SeqTrainingArguments(
             output_dir="/mnt/data2/kaiechen/base" + lang,
             evaluation_strategy="steps",
