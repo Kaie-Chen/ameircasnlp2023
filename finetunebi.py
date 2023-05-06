@@ -38,14 +38,17 @@ import evaluate
 from LanguageDataset import LanguageDataset
 from utils import load_raw_data, predict
 import gc
+import wandb
 
 def main():
     # Load Model
+    wandb.login()
     main_folder =  './processed_data/'
 
     torch.manual_seed(42)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model_name = "finetune_models/checkpoint-16"
+    #model_name = "finetune_models/checkpoint-16"
+    model_name = "facebook/nllb-200-distilled-600M"
 
     print("Model Loading . . . . . . . . . . . . . . . .")
     model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
@@ -58,7 +61,7 @@ def main():
     # Load Data
     print("Data Loading . . . . . . . . . . . . . . . .")
     lang_code = [
-               'cni_Latn', 
+                'cni_Latn', 
                 'aym_Latn', 
                 'bzd_Latn', 
                 'gn_Latn', 
@@ -69,12 +72,12 @@ def main():
                 'shp_Latn', 
                 'hch_Latn'
                 ]
-    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn", additional_special_tokens=lang_code)
-    tokenizer.tgt_lang = 'cni_Latn'
-    #     new_tokens = lang_code
-#     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
-#     tokenizer.add_tokens(list(new_tokens))
-    model.resize_token_embeddings(len(tokenizer))
+    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
+#     tokenizer.tgt_lang = 'cni_Latn'
+#     #     new_tokens = lang_code
+# #     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
+# #     tokenizer.add_tokens(list(new_tokens))
+#     model.resize_token_embeddings(len(tokenizer))
     # Load data 
     train_src_filepath = [
                         main_folder+'ashaninka/dedup_filtered.cni',
@@ -201,58 +204,56 @@ def main():
         "wixarika"
     ]
 
-    # Trainer
-    training_args = Seq2SeqTrainingArguments(
-        output_dir="finetune_models/ashaninka",
-        evaluation_strategy="steps",
-        report_to="wandb",
-        learning_rate=6e-5,
-        per_device_train_batch_size=32,
-        per_device_eval_batch_size=32,
-        warmup_steps=6000,
-        lr_scheduler_type='constant_with_warmup',
-        weight_decay=0.01,
-        save_total_limit=10,
-        num_train_epochs=18,
-        predict_with_generate=True,
-        do_eval = True,
-        fp16=True,
-        eval_steps = 100,
-        save_steps = 5000,
-        gradient_accumulation_steps=8,
-        load_best_model_at_end=True,
-        group_by_length=True,
-        logging_first_step=True,
-        auto_find_batch_size=True,          
-        logging_steps=50,
-        run_name = 'ashaninka'
-
-    )
-
-    trainer = Seq2SeqTrainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_data[0],
-        tokenizer=tokenizer,
-        eval_dataset=eval_data[0],
-        data_collator=data_collator,
-        compute_metrics=compute_metrics,
-    )
+    
     # print("Training ashaninka . . . . . . . . . . . . . . . .")
     # trainer.train()
     # print("Trained")
 
-    index = 0
+    index2 = 0
     for lang in languages:
-        training_args.output_dir = "finetune_models/"+lang
-        training_args.run_name = lang
-        trainer.train_dataset = train_data[index]
-        trainer.eval_dataset = eval_data[index]
-        trainer.args = training_args
-        index = index + 1
+        # Trainer
+        training_args = Seq2SeqTrainingArguments(
+            output_dir="/mnt/data2/kaiechen/base" + lang,
+            evaluation_strategy="steps",
+            report_to="wandb",
+            learning_rate=3e-5,
+            per_device_train_batch_size=32,
+            per_device_eval_batch_size=32,
+            warmup_steps = 150,
+            lr_scheduler_type='cosine',
+            weight_decay=0.01,
+            save_total_limit=4,
+            num_train_epochs=25,
+            predict_with_generate=True,
+            do_eval = True,
+            fp16=True,
+            eval_steps = 50,
+            save_steps = 50,
+            gradient_accumulation_steps=2,
+            load_best_model_at_end=True,
+            group_by_length=True,
+            logging_first_step=True,
+            auto_find_batch_size=True,          
+            logging_steps=20,
+            run_name = lang,)
+
+        trainer = Seq2SeqTrainer(
+            model=model,
+            args=training_args,
+            train_dataset=train_data[index2],
+            tokenizer=tokenizer,
+            eval_dataset=eval_data[index2],
+            data_collator=data_collator,
+            compute_metrics=compute_metrics,
+        )
+        
+
+        index2 = index2 + 1
         print("Training " + lang + " . . . . . . . . . . . . . . . .")
         trainer.train()
         print("Trained")
+        wandb.finish()
+
         
 
 if __name__ == '__main__':
