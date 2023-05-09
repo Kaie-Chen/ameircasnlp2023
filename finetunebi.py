@@ -39,9 +39,13 @@ from LanguageDataset import LanguageDataset
 from utils import load_raw_data, predict
 import gc
 import wandb
+import argparse
 
 def main():
     # Load Model
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--lang_list', type=list)
+    # args = parser.parse_args()
     wandb.login()
     main_folder =  './processed_data/'
 
@@ -51,7 +55,7 @@ def main():
     model_name = "facebook/nllb-200-distilled-600M"
 
 
-
+    # lang_code = args.lang_list
 
     # Load Data
     print("Data Loading . . . . . . . . . . . . . . . .")
@@ -67,12 +71,6 @@ def main():
                 'shp_Latn', 
                 'hch_Latn'
                 ]
-    tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="cni_Latn", tgt_lang="spa_Latn")
-#     tokenizer.tgt_lang = 'cni_Latn'
-#     #     new_tokens = lang_code
-# #     new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
-# #     tokenizer.add_tokens(list(new_tokens))
-#     model.resize_token_embeddings(len(tokenizer))
     # Load data 
     train_src_filepath = [
                         main_folder+'ashaninka/dedup_filtered.cni',
@@ -131,46 +129,15 @@ def main():
     # Evaluate 
     metric = evaluate.load("chrf")
 
-    def postprocess_text(preds, labels):
-        preds = [pred.strip() for pred in preds]
-        labels = [[label.strip()] for label in labels]
-
-        return preds, labels
-
-    def compute_metrics(eval_preds):
-        preds, labels = eval_preds
-        if isinstance(preds, tuple):
-            preds = preds[0]
-        decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
-
-        labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-        decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
-
-        decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
-
-        result = metric.compute(predictions=decoded_preds, references=decoded_labels)
-        result = {"chrf": result["score"]}
-
-        prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id) for pred in preds]
-        result["gen_len"] = np.mean(prediction_lens)
-        result = {k: round(v, 4) for k, v in result.items()}
-        return result
+  
 
     train_data = []
     eval_data = []
 
-#    # for index in range(len(train_src_filepath)):
-#     #for index in range(1):
-#     train_raw = load_raw_data(train_src_filepath, lang_code, model_name, train_trg_filepath, max_length=256)
-#     eval_raw = load_raw_data(eval_src_filepath, lang_code, model_name, eval_trg_filepath, max_length=256)
-#     print("Data Loaded")
-#     print("Dataset Creating . . . . . . . . . . . . . . . .")
-#     train_data = LanguageDataset(train_raw)
-#     eval_data = LanguageDataset(eval_raw)
-#     print("Dataset Created")
+    model_name = "facebook/nllb-200-distilled-600M"
     for i in range(len(train_src_filepath)):
-        train_raw = load_raw_data([train_src_filepath[i]],[lang_code[i]], model_name, [train_trg_filepath[i]], max_length=256)
-        eval_raw = load_raw_data([eval_src_filepath[i]], [lang_code[i]], model_name, [eval_trg_filepath[i]], max_length=256)
+        train_raw = load_raw_data([train_trg_filepath[i]],[lang_code[i]], model_name, [train_src_filepath[i]], max_length=256)
+        eval_raw = load_raw_data([eval_trg_filepath[i]], [lang_code[i]], model_name, [eval_src_filepath[i]], max_length=256)
         print("Data Loaded")
         print("Dataset Creating . . . . . . . . . . . . . . . .")
         train_data.append(LanguageDataset(train_raw))
@@ -181,57 +148,79 @@ def main():
     # Create dataset
    
 
-    data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model_name)
+    
+
+
 
     del train_raw 
     del eval_raw
     
-    languages = [
-        "ashaninka",
-        "aymara",
-        "bribri",
-        "guarani",
-        "hnahnu",
-        "nahuatl",
-        "quechua",
-        "raramuri",
-        "shipibo_konibo",
-        "wixarika"
-    ]
+    # languages = [
+    #     "ashaninka",
+    #     "aymara",
+    #     "bribri",
+    #     "guarani",
+    #     "hnahnu",
+    #     "nahuatl",
+    #     # "quechua",
+    #     "raramuri",
+    #     "shipibo_konibo",
+    #     "wixarika"
+    # ]
 
     
-    # print("Training ashaninka . . . . . . . . . . . . . . . .")
-    # trainer.train()
-    # print("Trained")
 
     index2 = 0
-    for lang in languages:
+    for lang in lang_code:
         # Trainer
         print("Model Loading . . . . . . . . . . . . . . . .")
         model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
         for name, param in model.named_parameters():
-            if param.requires_grad and ('decoder' in name or 'shared' in name):
+            if param.requires_grad and ('model.encoder' in name):
                 param.requires_grad = False
+        tokenizer = AutoTokenizer.from_pretrained(model_name, src_lang="spa_Latn", tgt_lang=lang, additional_special_tokens=lang_code)
+        data_collator = DataCollatorForSeq2Seq(tokenizer=tokenizer, model=model)
+        def postprocess_text(preds, labels):
+            preds = [pred.strip() for pred in preds]
+            labels = [[label.strip()] for label in labels]
+            return preds, labels
+        def compute_metrics(eval_preds):
+            preds, labels = eval_preds
+            if isinstance(preds, tuple):
+                preds = preds[0]
+            decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
+
+            labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
+            decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+
+            decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
+
+            result = metric.compute(predictions=decoded_preds, references=decoded_labels)
+            result = {"chrf": result["score"]}
+
+            prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id) for pred in preds]
+            result["gen_len"] = np.mean(prediction_lens)
+            result = {k: round(v, 4) for k, v in result.items()}
+            return result
         print("Model Loaded")
-        x
         training_args = Seq2SeqTrainingArguments(
-            output_dir="/mnt/data2/kaiechen/base" + lang,
+            output_dir="/mnt/data3/kaiechen/spanishX/" + lang,
             evaluation_strategy="steps",
             report_to="wandb",
-            learning_rate=3e-5,
+            learning_rate=1e-3,
             per_device_train_batch_size=32,
             per_device_eval_batch_size=32,
-            warmup_steps = 150,
+            warmup_steps = 200,
             lr_scheduler_type='cosine',
-            weight_decay=0.01,
+            weight_decay=1e-4,
             save_total_limit=4,
-            num_train_epochs=25,
+            num_train_epochs=20,
             predict_with_generate=True,
             do_eval = True,
             fp16=True,
             eval_steps = 50,
             save_steps = 50,
-            gradient_accumulation_steps=2,
+            gradient_accumulation_steps=8,
             load_best_model_at_end=True,
             group_by_length=True,
             logging_first_step=True,
