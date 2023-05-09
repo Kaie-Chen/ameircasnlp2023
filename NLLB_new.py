@@ -71,6 +71,9 @@ class Languages:
 
 
 def main():
+    """
+    LOAD MODEL FROM TERMINAL
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_path', type=str)
     args = parser.parse_args()
@@ -162,6 +165,12 @@ def main():
     
 if __name__ == '__main__':
     main()
+  
+
+
+
+
+
   
 
 
