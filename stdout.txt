@@ -1,3 +1,0 @@
-Job ID: 3730
-Job User: tianruigu
-Num Cores: 16
