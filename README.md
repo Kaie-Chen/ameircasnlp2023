@@ -16,7 +16,7 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 | `9. shipibo_konibo -> es`| 22.57    | 3.24     | 37.01    | 13.46    | `39.60`  | `16.03`  |
 | `10. wixarika -> es`     | 16.61    | 1.61     | 27.68    | 6.36     | `28.30`  | `6.91`   |
 
-|| X-to-Spanish | Baseline (Test) | Multi | Multi+ | Multi++ | Bi | Bi++ | Bi++ (Test)||
+| X-to-Spanish | Baseline (Test) | Multi | Multi+ | Multi++ | Bi | Bi++ | Bi++ (Test)|
 | -------------|------------------|-------|--------|---------|----|-------|-----------|
 |Wixarika| 0.304 |0.277 |0.294 |0.294 |0.266 |0.279| 0.288|
 |Hñähñu |0.147| 0.129| 0.133 |0.138 |0.144 |0.141 |0.148|
