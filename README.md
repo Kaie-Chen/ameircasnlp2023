@@ -5,7 +5,6 @@ We will be using Meta's No Language Left Behind Model (NLLB) for the machine tra
 ## Results:
 ||**Baseline NLLB-600M**||**Finetuned NLLB-600M**|| **Averaged NLLB-600M**   ||
 | ---------------------------| -------- | -------- | -------- | -------- | -------- | -------- |
-|| **chrF** | **BLEU** | **chrF** | **BLEU** | **chrF** | **BLEU** |
 | `1. ashaninka -> es`       | 16.56    | 2.36     | 20.47    | 3.35     |`21.26`   | `3.80`   |
 | `2. aymara -> es`          | 30.32    | 9.82     | 32.03    | 11.03    | `34.48`  | `13.23`  |
 | `3. bribri -> es`        | 21.37    | 2.45     | 31.41    | 8.60     | `32.79`  | `10.03`  |
